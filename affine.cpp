@@ -78,7 +78,7 @@ int main()
 
         // TODO: Write code to transform the point. This should be a single
         //       line of code!
-        // YOUR CODE HERE
+        point = transform * point;
 
         // If we have a new point, display it.
         if(cin) {
@@ -97,7 +97,10 @@ Matrix transIdent()
     //         1 0 0
     //         0 1 0
     //         0 0 1
-    // YOUR CODE HERE
+    //the matrix
+    Matrix m (3,3);
+    for (int i = 0; i<3; i++){m.at(i,i)=1;}
+    return m;
 }
 
 
@@ -109,7 +112,14 @@ Matrix transRotate(double angle)
     //         cos(angle) -sin(angle) 0
     //         sin(angle)  cos(angle) 0
     //         0           0          1
-    // YOUR CODE HERE
+    //the matrix
+    Matrix m = transIdent();
+    angle = angle * M_PI / 180.0;
+    m.at(0,0)=cos(angle);
+    m.at(0,1)=-sin(angle);
+    m.at(1,0)=sin(angle);
+    m.at(1,1)=cos(angle);
+    return m;
 }
 
 // build a scaling matrix
@@ -120,7 +130,11 @@ Matrix transScale(double sx, double sy)
     //         sx 0  0
     //         0  sy 0
     //         0  0  1
-    // YOUR CODE HERE
+    //the matrix
+    Matrix m = transIdent();
+    m.at(0,0)=sx;
+    m.at(1,1)=sy;
+    return m;
 }
 
 // build a translation matrix
@@ -131,7 +145,11 @@ Matrix translate(double tx, double ty)
     //         1 0 tx
     //         0 1 ty
     //         0 0 1
-    // YOUR CODE HERE
+    //the matrix
+    Matrix m =transIdent();
+    m.at(0,2)=tx;
+    m.at(1,2)=ty;
+    return m;
 }
 
 // do the transformation menu
@@ -154,9 +172,33 @@ Matrix transformMenu()
         //     result = newTransform * result;
         // Do a quick google search for "Affine Transformation Matrix" to
         // get more details
-        // YOUR CODE HERE
+        switch(choice)
+        {
+            case 'T':
+                cout << "Enter the x and y translation: ";
+                cin >> x >> y;
+                result = translate(x,y) * result;
+                break;
 
-    }while(choice != 'D');
+            case 'R':
+                cout << "Enter the angle of rotation (degrees): ";
+                cin >> angle;
+                result = transRotate(angle) * result;
+                break;
+
+            case 'S':
+                cout << "Enter the x and y scaling factors: ";
+                cin >> x >> y;
+                result = transScale(x,y) * result;
+                break;
+
+            case 'D':
+                break;
+
+            default:
+                cout << "Invalid choice." << endl;
+            }
+    }while (choice !='D');
 
     return result;
 }
@@ -171,5 +213,17 @@ Matrix getPoint()
     //          y
     //          1
     // Return your matrix at the end of the function.
-    // YOUR CODE HERE
+    double x, y;
+
+    cout << "Enter x and y: ";
+    cin >> x >> y;
+
+    if(!cin) return Matrix(3,1);
+
+    Matrix p(3,1);
+    p.at(0,0) = x;
+    p.at(1,0) = y;
+    p.at(2,0) = 1;
+
+    return p;
 }

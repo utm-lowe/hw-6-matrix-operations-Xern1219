@@ -35,4 +35,5 @@ int main()
     // Test out scalar multiplication
     cout << "2*A" << endl << 2*a << endl;
     cout << "A*2" << endl << a*2 << endl;
+    
 }
